@@ -9,6 +9,7 @@ from flask_login import LoginManager
 # from config import config
 from flask_uploads import UploadSet, configure_uploads, IMAGES  # 导入
 
+
 # bootstrap = Bootstrap()
 mail = Mail()
 # moment = Moment()
@@ -29,3 +30,7 @@ def create_app(config_name):
     configure_uploads(app, photos)  # 初始化
 
     return app
+
+'''
+在大型项目中使用  flask-uploads
+'''
