@@ -2,7 +2,7 @@ import os
 import random
 
 from PIL import Image
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, request
 from flask_uploads import UploadSet, IMAGES, patch_request_class, configure_uploads
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired, FileAllowed, FileField
@@ -15,7 +15,8 @@ app = Flask(__name__, static_folder=r'./templates')
 ==========================  配置文件上传模块
 '''
 photos = UploadSet("photos", IMAGES)
-app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(os.getcwd(), 'uploads')
+# 可以自动创建文件夹 uploads
+app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(os.getcwd(), 'uploads')  # uploaded_InstanceName_dest
 # app.config["UPLOADEd_PHOTOS_URL"] = ''
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 configure_uploads(app, photos)
@@ -43,21 +44,26 @@ def Thumbnail(path):
     img = Image.open(path)
     img.thumbnail((128, 128))
     path, filename = os.path.split(path)
-    print(filename)
-    name =filename[:5] + '_thumbnail.jpg'
+    # print(filename)
+    name = filename[:5] + '_thumbnail.jpg'
     newPath = os.path.join(path, name)
     img.save(newPath)
 
 
+@app.route('/')
+def index():
+    return redirect(url_for("upload"))
+
+
 @app.route('/upload/', methods=['get', 'post'])
 def upload():
-    img_url = None
+    img_url = photos.url("vsvry1e15ugkds8ec9zuvk5fqoh4l1ogbackground.jpg")
     form = UploadForm()
     if form.validate_on_submit():
         image = form.photo.data
         if not image:
-            return
-        print(form.photo.data.filename)
+            return redirect(url_for("upload"))
+        # print(form.photo.data.filename)
         suffix = os.path.split(form.photo.data.filename)[1]
         filename = random_string() + suffix
         # subFolder: 子目录  name： 文件名称
@@ -69,7 +75,31 @@ def upload():
         # 生成缩略图
         savedPath = photos.path(filename)
         Thumbnail(savedPath)
-    return render_template('upload.html', form=form, img_url=img_url)
+    return render_template("upload.html", form=form, img_url=img_url)
+
+
+@app.route('/upload/multi', methods=['get', 'post'])
+def uploadMulti():
+    img_url_list = []
+    subFolder = 'multi'
+    form = UploadForm()
+    if form.validate_on_submit():
+        # todo 不能再通过 form.photo.data 获取上传的文件
+        fileList = request.files.getlist('photo')
+        # print('photo', fileList)
+        if not fileList:
+            return redirect(url_for('uploadMulti'))
+        for image in fileList:
+            name = os.path.split(image.filename)[1]
+            # todo 子文件夹的名称不需要添加 /
+            # photos.save(image, folder=subFolder, name=name)
+            # 另一种写法
+            photos.save(image, name=f"{subFolder}/{name}")
+            realName = f"{subFolder}/{name}"
+            # todo 获取保存文件的实际名称,需要添加 文件夹的名称
+            img_url = photos.url(realName)
+            img_url_list.append(img_url)
+    return render_template('uploadMulti.html', form=form, img_url_list=img_url_list)
 
 
 if __name__ == '__main__':
