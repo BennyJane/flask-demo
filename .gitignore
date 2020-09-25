@@ -132,3 +132,6 @@ dmypy.json
 upload/demo-1/uploads/*
 */logs/*
 */log_*/*
+
+*.iml
+*.xml
