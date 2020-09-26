@@ -44,6 +44,7 @@ manager.add_command("time", currentTime())
 # manager.add_command("hello", hello())
 
 
+# 这个是必须的，必须调用 manager.run() 方法
 def main():
     manager.run()
 
@@ -51,9 +52,7 @@ def main():
 if __name__ == '__main__':
     try:
         import sys
-
         sys.exit(main())
     except Exception as e:
         import traceback
-
         traceback.print_exc()
