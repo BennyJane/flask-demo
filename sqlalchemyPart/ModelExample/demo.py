@@ -1,103 +1,80 @@
-from datetime import datetime
+# -*- coding: utf-8 -*-
+# @Time : 2020/9/27
+# @Author : Benny Jane
+# @Email : 暂无
+# @File : demo.py
+# @Project : Flask-Demo
+import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-demo = Flask(__name__)
+base_dir = os.path.abspath(os.path.dirname(__file__))
 
-db = SQLAlchemy(demo)
-
-'''
-===============================  ORM    =============================== 
-'''
-from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(base_dir, 'data.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 
-# 继承自 db.Model , 混合类 UserMixin
-class Admin(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)  # 添加主键
-    username = db.Column(db.String(20))
-    password_hash = db.Column(db.String(128))
-    blog_title = db.Column(db.String(60))
-    blog_sub_title = db.Column(db.String(100))
-    name = db.Column(db.String(30))
-    about = db.Column(db.String(30))
-
-    def set_password(self, password):
-        # 生成密码的hash值
-        # todo 查看源码，分析 method， salt_length
-        self.password_hash = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
-
-    def validate_password(self, password):
-        # 验证密码
-        return check_password_hash(self.password_hash, password)
-
-
-class Category(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), unique=True)
+    username = db.Column(db.String(80), unique=True)
+    email = db.Column(db.String(120), unique=True)
 
-    # todo 一对多，外键关联
-    # 实现额外的功能： 可以通过该字段直接该分类下的所有文章
-    posts = db.relationship("Post", back_populates="category")
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
 
-    def delete(self):
-        # 将当前分类下所有posts绑定到默认分类上，并删除当前分类
-        default_category = Category.query.get(1)
-        posts = self.posts[:]
-        for post in posts:
-            post.category = default_category
-        db.session.delete(self)  # 删除当前分类
-        db.session.commit()
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+
+'''
+一对多： 
+'''
 
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(60))
-    body = db.Column(db.Text)  # 长文本
-    # 时间戳
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
-    can_comment = db.Column(db.Boolean, dafault=True)  # 布尔值
-    # todo 外键关联
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    # 实现额外的功能： 可以通过该字段直接获取post的分类
-    category = db.relationship('Category', back_populates="posts")
-    # todo
-    comments = db.relationship('Comment', back_populates="post", cascade="all, delete-orphan")
-
-
-class Comment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(30))
-    email = db.Column(db.String(254))
-    site = db.Column(db.String(255))
+    title = db.Column(db.String(80))
     body = db.Column(db.Text)
+    pub_date = db.Column(db.DateTime)  # FIXME 时间戳的定义
 
-    from_admin = db.Column(db.Boolean, default=False)
-    reviewed = db.Column(db.Boolean, default=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True) # todo 添加索引
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    # todo 只需要在一侧写，就可以在两个表中使用关联关系 ==》 在 backref 中声明了 posts 作为动态关系
+    category = db.relationship('Category',
+                               backref=db.backref('posts', lazy='dynamic'))
 
-    # todo 两个外键
-    replied_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    def __init__(self, title, body, category, pub_date=None):
+        self.title = title
+        self.body = body
+        # todo 初始化的时候，添加当前时间
+        if pub_date is None:
+            pub_date = datetime.utcnow()
+        self.pub_date = pub_date
+        self.category = category
 
-    post = db.relationship('Post', back_populates='comments')
-    # todo 自连接
-    replies = db.relationship('Comment', back_populates='replied', cascade='all, delete-orphon')
-    replied = db.relationship('Comment', back_populates='replies', remote_side=[id])
-    '''
-    Same with:
-    replies = db.relationship('Comment', backref=db.backref('replied', remote_side=[id]),
-    cascade='all,delete-orphan')
-    '''
+    def __repr__(self):
+        return '<Post %r>' % self.title
 
 
-class Link(db.Model):
+class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30))
-    url = db.Column(db.String(255))
+    name = db.Column(db.String(50))
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Category %r>' % self.name
 
 
-if __name__ == '__main__':
-    demo.run(debug=True)
+'''
+为了创建初始数据库，只需要从交互式 Python shell 中导入 db 对象并且调用 SQLAlchemy.create_all() 方法来创建表和数据库:
+
+>>> from yourapplication import db
+>>> db.create_all()
+
+官方文档：http://www.pythondoc.com/flask-sqlalchemy/quickstart.html
+'''
