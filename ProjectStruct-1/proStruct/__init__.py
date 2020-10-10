@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 
 # 必须将试图函数全部引入到__init__文件内 ==》 将视图函数引入到app实例化的文件内
-from FlaskAppFile import views
+from proStruct import views
 
 if __name__ == '__main__':
     app.run()
