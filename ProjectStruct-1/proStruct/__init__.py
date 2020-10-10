@@ -11,6 +11,11 @@ from FlaskAppFile.settings import config
 from FlaskAppFile.views import indexView
 
 
+<<<<<<< HEAD:ProjectStruct-1/FlaskAppFile/__init__.py
+=======
+# 必须将试图函数全部引入到__init__文件内 ==》 将视图函数引入到app实例化的文件内
+from proStruct import views
+>>>>>>> 8ad499873906fa020ec77180e6f503ad800db241:ProjectStruct-1/proStruct/__init__.py
 
 def create_app(config_name=None):
     if config_name is None:

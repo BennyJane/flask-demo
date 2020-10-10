@@ -1,0 +1,3 @@
+include README.MD
+recursive-include proStruct/static *
+recursive-include proStruct/template *
