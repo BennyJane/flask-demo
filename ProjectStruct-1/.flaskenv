@@ -1,2 +1,2 @@
-FLASK_APP=FlaskAppFile
+FLASK_APP=proStruct
 FLASK_ENV=development

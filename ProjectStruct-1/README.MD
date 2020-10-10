@@ -27,3 +27,4 @@ pip list
 # 使用 gunicorn 运行
 gunicorn packageName:app 
 ```
+### 项目目录文件解释
