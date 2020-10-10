@@ -4,10 +4,5 @@
 # @Email : 暂无
 # @File : views.py
 # @Project : Flask-Demo
-
-from FlaskAppFile import app
-
-
-@app.route('/', methods=['get'])
-def index():
+def indexView():
     return "<h1>Hello World!!</h1>"

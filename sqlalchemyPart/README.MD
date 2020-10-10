@@ -37,7 +37,7 @@ SQLALCHEMY_ECHO = True
 ```
 ## 绑定app
 
-```
+```                                          
 from flask import Flask
 import configs
 from flask_sqlalchemy import SQLAlchemy
