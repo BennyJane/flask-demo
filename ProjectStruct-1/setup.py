@@ -17,7 +17,7 @@ def getInstallPackages():
         res.append(package)
     return res
 
-
+#
 # current_installed_packages = getInstallPackages()
 # print(current_installed_packages)
 setup(

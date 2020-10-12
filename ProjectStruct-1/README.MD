@@ -28,3 +28,14 @@ pip list
 gunicorn packageName:app 
 ```
 ### 项目目录文件解释
+
+### Dockerfile 生成镜像文件
+```bash
+sudo docker build -t 'proStruct'
+sudo docker images
+
+sudo docker run -it --rm -p 8001:80001 proStruct
+
+sudo docker run -d -p 8001:8001 --name online-pro proStruct
+
+```

@@ -4,7 +4,7 @@
 # @Email : 暂无
 # @File : errors.py
 # @Project : Flask-Demo
-from FlaskAppFile import app
+from simpleApp import app
 from flask import render_template
 
 

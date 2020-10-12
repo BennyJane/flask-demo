@@ -5,7 +5,7 @@
 # @File : views.py
 # @Project : Flask-Demo
 
-from FlaskAppFile import app
+from simpleApp import app
 
 
 @app.route('/', methods=['get'])
