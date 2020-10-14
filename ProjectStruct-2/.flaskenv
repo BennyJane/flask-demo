@@ -1,2 +1,0 @@
-FLASK_APP=FlaskAppFile
-FLASK_ENV=development
