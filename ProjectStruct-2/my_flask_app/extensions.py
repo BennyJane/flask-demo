@@ -16,4 +16,5 @@ db = SQLAlchemy()
 migrate = Migrate()
 cache = Cache()
 debug_toolbar = DebugToolbarExtension()
+# https://github.com/nickjj/flask-static-digest
 flask_static_digest = FlaskStaticDigest()

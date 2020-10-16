@@ -3,7 +3,7 @@
 from flask import flash
 
 
-# 返回所有
+# 返回所有 ==》 用于表单错误处理
 def flash_errors(form, category="warning"):
     """Flash all errors for a form."""
     for field, errors in form.errors.items():

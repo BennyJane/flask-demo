@@ -18,6 +18,7 @@ from my_flask_app.extensions import (
 )
 
 
+# todo 修改配置文件传入的方式
 def create_app(config_object="my_flask_app.settings"):
     """Create application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
 
@@ -64,6 +65,7 @@ def register_errorhandlers(app):
         error_code = getattr(error, "code", 500)
         return render_template(f"{error_code}.html"), error_code
 
+    # todo better
     for errcode in [401, 404, 500]:
         app.errorhandler(errcode)(render_error)
     return None

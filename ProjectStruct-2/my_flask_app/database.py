@@ -8,6 +8,7 @@ Column = db.Column
 relationship = db.relationship
 
 
+# 扩展类
 class CRUDMixin(object):
     """Mixin that adds convenience methods for CRUD (create, read, update, delete) operations."""
 

@@ -29,9 +29,6 @@ def load_user(user_id):
 @blueprint.route("/", methods=["GET", "POST"])
 def home():
     """Home page."""
-    db.drop_all()
-    db.create_all()
-    print('''table''')
     form = LoginForm(request.form)
     current_app.logger.info("Hello from the home page!")
     # Handle logging in
