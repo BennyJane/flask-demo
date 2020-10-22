@@ -1,0 +1,24 @@
+{
+  "http:M4zCEW4f9XPanbMN-Lb9O0S8j893f0e1ezAohFVL:hyvideo": {
+    "upHosts": [
+      "http://up.qiniu.com",
+      "http://upload.qiniu.com",
+      "-H up.qiniu.com http://183.131.7.3"
+    ],
+    "ioHosts": [
+      "http://iovip.qbox.me"
+    ],
+    "deadline": 1603111699
+  },
+  "http:NaTF79Ps5Gx4Ee8LcuhViZHMZQL9ow-tNA-5hwAQ:myfile02-public": {
+    "upHosts": [
+      "http://up-z2.qiniu.com",
+      "http://upload-z2.qiniu.com",
+      "-H up-z2.qiniu.com http://14.152.58.16"
+    ],
+    "ioHosts": [
+      "http://iovip-z2.qbox.me"
+    ],
+    "deadline": 1603288890
+  }
+}
