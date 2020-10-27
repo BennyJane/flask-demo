@@ -24,6 +24,6 @@ Quick Setup
 
 For details on how this all works, see my article [Using Celery with Flask](http://blog.miguelgrinberg.com/post/using-celery-with-flask).
 
-
+apply_async()
 ### 补充
 1. 需要单独进程运行 celery, 才能接收任务,处理任务,否则将一直处于 pending状态
