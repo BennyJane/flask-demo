@@ -2,7 +2,16 @@
 #set -ex
 set -e
 
+#### todo
+# 修改为死循环, 在该脚本中完成常用命令的缩写操作
+# 添加 git add等快捷方式
+# 封装为函数
 
+
+current_branch=master
+
+
+# 获取当前脚本所在的目录
 #cd "$(dirname "$0")"
 cd `dirname "$0"`
 echo "[当前目录: ] $(pwd)"
@@ -36,7 +45,7 @@ read is_push
 
 case ${is_push} in
 "y" | "yes")
-  git push origin master;;
+  git push origin ${current_branch};;
 "q" | "exit" | "e")
  echo "退出,不推送到远程分支"
  exit 1;;
@@ -44,3 +53,5 @@ case ${is_push} in
  echo "退出";;
 esac
 echo '---------------------------------[end]-----------------------------------------------'
+
+
