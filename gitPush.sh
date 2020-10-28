@@ -28,7 +28,10 @@ fi
 
 echo "是否向远程分支推送本次修改 $(read is_push)"
 
-if [[ ${is_push} = "y"]] || [[ ${is_push} = "yes"]]
-then
-    git push origin master
-fi
+
+case ${is_push} in
+"y" | "yes")
+  git push origin master;;
+ *)
+ echo "没有提交本次更新";;
+esac
