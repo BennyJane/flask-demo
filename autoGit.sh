@@ -63,7 +63,12 @@ then
     git commit -m "更新"
 elif [[ -n ${message} ]]
 then
-    git commit -m "${message}"
+    if test "$(git commit -m ${message})"
+    then
+       echo "[commit success!]"
+    else
+       echo "[commit fail!]"
+    fi
 else
     echo "请输入本次更新信息"
 fi
