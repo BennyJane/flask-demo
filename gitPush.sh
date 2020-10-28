@@ -19,14 +19,13 @@ if [[ ${message} = "q" ]]
 then
     # 通过输入 q, 直接推出当前脚本
     exit 1
-elif [[ -n ${message} ]]
-then
-    git commit -m "${message}"
-
 elif [[ ${message} = "d" ]]
 then
     echo "使用默认注释，进行更新"
     git commit -m "更新"
+elif [[ -n ${message} ]]
+then
+    git commit -m "${message}"
 else
     echo "请输入本次更新信息"
 fi
@@ -39,8 +38,9 @@ case ${is_push} in
 "y" | "yes")
   git push origin master;;
 "q" | "exit" | "e")
- echo "退出,不推送到远程分支";;
+ echo "退出,不推送到远程分支"
+ exit 1;;
  *)
- echo "推出";;
+ echo "退出";;
 esac
 echo '---------------------------------[end]-----------------------------------------------'
