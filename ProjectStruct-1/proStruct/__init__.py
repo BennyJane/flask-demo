@@ -9,10 +9,10 @@ import os
 from flask import Flask
 # 非蓝图视图函数的引进来，再通过add_url_rule来进行绑定 todo 使用current_app 会报错
 # 必须将试图函数全部引入到__init__文件内 ==》 将视图函数引入到app实例化的文件内
-from flask_sqlalchemy import get_debug_queries
+# from flask_sqlalchemy import get_debug_queries
 
 from proStruct import views
-# from .cli import register_cli
+from .command import register_cli
 from .extensions import register_ext, db
 from .log import register_logging
 from .models.model import Book
@@ -29,10 +29,10 @@ def create_app(config_name=None):
     register_logging(app)
     register_ext(app)
     register_blueprint(app)
-    # register_cli(app, db)  # 需要在db绑定app后在执行
+    register_cli(app, db)  # 需要在db绑定app后在执行
 
     # flask 钩子 before_request
-    register_request_handlers(app)
+    # register_request_handlers(app)
     # 非必须==> 如何不适用 模板| shell，可以添加
     register_shell_context(app)
     register_template_context(app)
@@ -59,14 +59,14 @@ def register_template_context(app):
         return dict(book=book, customValue=customValue)
 
 
-def register_request_handlers(app):
-    @app.after_request
-    def query_profiler(response):
-        '''处理查询时间过长的问题'''
-        for q in get_debug_queries():
-            if q.duration >= app.config['BLUELOG_SLOW_QUERY_THRESHOLD']:
-                app.logger.warning(
-                    'Slow query: Duration: %fs\n Context: %s\nQuery: %s\n '
-                    % (q.duration, q.context, q.statement)
-                )
-        return response
+# def register_request_handlers(app):
+#     @app.after_request
+#     def query_profiler(response):
+#         '''处理查询时间过长的问题'''
+#         for q in get_debug_queries():
+#             if q.duration >= app.config['BLUELOG_SLOW_QUERY_THRESHOLD']:
+#                 app.logger.warning(
+#                     'Slow query: Duration: %fs\n Context: %s\nQuery: %s\n '
+#                     % (q.duration, q.context, q.statement)
+#                 )
+#         return response

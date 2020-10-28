@@ -31,6 +31,11 @@ class BaseConfig(object):
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = prefix + os.path.join(baseDir, 'data-dev.db')
 
+    # 添加celery配置
+    CELERY_BROKER_URL = 'reids://localhost:6379'
+    CELERY_RESULT_BACKEND = 'reids://localhost:6379'
+    CELERY_IMPORTS = ('proStruct.services.tasks')
+
 
 class TestingConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = prefix + os.path.join(baseDir, 'data-test.db')
