@@ -15,6 +15,7 @@ from proStruct import views
 from .command import register_cli
 from .extensions import register_ext, db
 from .log import register_logging
+from .errors import register_errors
 from .models.model import Book
 from .settings import config
 from .www import register_blueprint
@@ -30,6 +31,7 @@ def create_app(config_name=None):
     register_ext(app)
     register_blueprint(app)
     register_cli(app, db)  # 需要在db绑定app后在执行
+    register_errors(app)
 
     # flask 钩子 before_request
     # register_request_handlers(app)
@@ -37,8 +39,8 @@ def create_app(config_name=None):
     register_shell_context(app)
     register_template_context(app)
 
-    if len(app.view_functions.keys()) < 1:
-        # 确保初始化项目的时候存在一个视图页面
+    if len(app.view_functions.keys()) < 2:
+        # 确保初始化项目的时候存在一个视图页面; flask 默认添加有  static路由
         with app.app_context():
             app.add_url_rule('/', endpoint='/', view_func=views.index)
     return app
@@ -57,7 +59,6 @@ def register_template_context(app):
         book = Book.query.first()
         customValue = '传入模板中直接使用的变量|函数；最后return对象必须是dict'
         return dict(book=book, customValue=customValue)
-
 
 # def register_request_handlers(app):
 #     @app.after_request

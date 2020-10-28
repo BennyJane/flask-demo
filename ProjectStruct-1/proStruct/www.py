@@ -6,7 +6,9 @@
 # @Project : ProjectStruct-1
 
 from .routes import index_bp
+from .routes.api import api_bp
 
 
 def register_blueprint(app):
     app.register_blueprint(index_bp, url_prefix='/index')
+    app.register_blueprint(api_bp, url_prefix='/api')

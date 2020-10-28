@@ -40,3 +40,16 @@ sudo docker run -it --rm -p 8001:80001 proStruct
 sudo docker run -d -p 8001:8001 --name online-pro proStruct
 
 ```
+
+
+### celery扩展：　处理异步消息
+```bash
+# 另起终端执行
+celery -A proStruct.celery:celery_app worker -l info
+```
+
+
+### 启动flask 项目
+```bash
+flask run
+```
