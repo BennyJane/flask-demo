@@ -7,14 +7,39 @@ set -e
 # 添加 git add等快捷方式
 # 封装为函数
 
+push_branch=master
 
-current_branch=master
-
+current_branch="$(git symbolic-ref --short -q HEAD)"
 
 # 获取当前脚本所在的目录
 #cd "$(dirname "$0")"
 cd `dirname "$0"`
 echo "[当前目录: ] $(pwd)"
+
+echo "[当前所在分支名称]: ${current_branch}"
+if [[ $current_branch != $push_branch ]]
+then
+   echo "当前所处分支与推送远程分支不一致!"
+   echo "是否将推送分支${push_branch}修改为当前分支${current_branch}"; read is_change
+   if test ${is_change} = "y"
+   then
+       push_branch=${current_branch}
+   else
+       exit 1
+   fi
+fi
+
+#echo "请确认当前所处分支是否是(输入y/n): ${current_branch}"; read is_current
+##read is_current
+#case ${is_current} in
+#"n")
+#  echo "退出: 当前分支不正确"
+#  exit 1;;
+#esac
+
+echo '------------------------------------------------------------------------------------'
+
+
 
 git add .
 git status
