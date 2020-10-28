@@ -1,8 +1,10 @@
 #!/bin/bash
 #set -ex
 set -e
-export LC_ALL=zh_CN.UTF-8
-export LANG=zh_CN.UTF-8
+#export LC_ALL=zh_CN.UTF-8
+#export LANG=zh_CN.UTF-8
+# git 提交编码方式警告处理:https://blog.csdn.net/blankrabbit/article/details/80609572
+# git config --global i18n.commitencoding utf-8
 
 #### todo
 # 修改为死循环, 在该脚本中完成常用命令的缩写操作
