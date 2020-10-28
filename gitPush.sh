@@ -25,3 +25,10 @@ then
 else
     echo "请输入本次更新信息"
 fi
+
+echo "是否向远程分支推送本次修改 $(read is_push)"
+
+if [[ ${is_push} = "y"]] || [[ ${is_push} = "yes"]]
+then
+    git push origin master
+fi
