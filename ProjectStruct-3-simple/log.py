@@ -11,6 +11,7 @@ from logging.handlers import RotatingFileHandler, SMTPHandler
 from flask import request
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+project_name = os.path.split(os.path.dirname(__file__))[1]
 
 
 def register_logging(app):
@@ -28,7 +29,7 @@ def register_logging(app):
 
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    file_handler = RotatingFileHandler(os.path.join(basedir, 'logs/bluelog.log'),
+    file_handler = RotatingFileHandler(os.path.join(basedir, f'logs/{project_name}.log'),
                                        maxBytes=10 * 1024 * 1024, backupCount=10)
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.INFO)

@@ -8,12 +8,14 @@
 from flask_bootstrap import Bootstrap
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_moment import Moment
 from flask_wtf import CSRFProtect
 
 db = SQLAlchemy()
 migrate = Migrate()
 csrf = CSRFProtect()
 bootstrap = Bootstrap()
+moment = Moment()
 
 
 def register_ext(app):
@@ -21,3 +23,4 @@ def register_ext(app):
     migrate.init_app(app, db)
     csrf.init_app(app)
     bootstrap.init_app(app)
+    moment.init_app(app)

@@ -9,7 +9,7 @@ import os
 import sys
 
 # 考虑直接使用app的root_path 路径
-baseDir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+baseDir = os.path.abspath(os.path.dirname(__file__))
 
 WIN = sys.platform.startswith('win')
 if WIN:
