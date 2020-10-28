@@ -1,0 +1,69 @@
+{% from 'bootstrap/nav.html'  import render_nav_item %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+        <meta charset="utf-f">
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %} {% endblock title %} - {{ admin.blog_title|default('Blog Title') }}</title>
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/%s.min.css' % request.cookies.get('theme', 'Lux')) }}"
+              type="text/css">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
+    {% endblock head %}
+</head>
+<body>
+{% block nav %}
+{% endblock nav %}
+
+{% block mainBody %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
+    <script type="text/javascript">
+        window.onload = function () {
+            var obtn = document.getElementById('backTop');
+            //获取页面可视区的高度
+            var clientHeight = document.documentElement.clientHeight;
+            var timer = null;
+            var isTop = true;
+            window.onscroll = function () {
+                var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+                if (osTop >= clientHeight) {
+                    //显示按钮
+                    obtn.style.display = 'block';
+                } else {
+                    //隐藏按钮
+                    obtn.style.display = 'none';
+                }
+                if (!isTop) {
+                    clearInterval(timer);
+                }
+                isTop = false;
+            };
+            obtn.onclick = function () {
+                //设置定时器
+                timer = setInterval(function () {
+                    //获取滚动条距离顶部的高度
+                    var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+                    var ispeed = Math.floor(-osTop / 6);
+                    document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
+
+                    isTop = true;
+                    if (osTop === 0) {
+                        clearInterval(timer);
+                    }
+                }, 30);
+            };
+        };
+    </script>
+{% endblock %}
+</body>
+</html>
