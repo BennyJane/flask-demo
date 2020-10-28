@@ -26,8 +26,8 @@ else
     echo "请输入本次更新信息"
 fi
 
-echo "是否向远程分支推送本次修改 $(read is_push)"
-
+echo "是否向远程分支推送本次修改"
+read is_push
 
 case ${is_push} in
 "y" | "yes")
