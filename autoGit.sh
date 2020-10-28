@@ -1,6 +1,8 @@
 #!/bin/bash
 #set -ex
 set -e
+export LC_ALL=zh_CN.UTF-8
+export LANG=zh_CN.UTF-8
 
 #### todo
 # 修改为死循环, 在该脚本中完成常用命令的缩写操作
