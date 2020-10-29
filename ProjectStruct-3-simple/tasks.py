@@ -31,3 +31,4 @@ def make_celery():
 
 
 celery = make_celery()
+
