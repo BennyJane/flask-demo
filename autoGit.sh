@@ -2,6 +2,6 @@
 #set -ex
 set -e
 
-push_branch=bin_dev
+push_branch=master
 source '/home/benny/PycharmProjects/gitHelper.sh' ${push_branch}
 

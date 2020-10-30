@@ -7,12 +7,18 @@
 import os
 
 from flask import Flask, render_template
-from flask_wtf.csrf import CSRFProtect
 
-from config import config
-from extension import register_ext
-from log import register_logging
+from web.config import config
+from web.extension import register_ext
+from web.log import register_logging
 from web.views import register_bp
+
+# 需要将映射到数据库中的模型导入到manage.py中, 否则.migrate过程中无法检测到数据变更.
+# https://flask-migrate.readthedocs.io/en/latest/
+# http://www.mamicode.com/info-detail-2258414.html
+# 必须将数据表引入到app实例模块中
+# https://www.jianshu.com/p/e4fc86fa21e8
+from web.models import User, Book, Link
 
 config_name = os.getenv("FLASK_CONFIG", 'development')
 app = Flask(__name__)
