@@ -5,16 +5,21 @@
 # @File : base02.py
 # @Project : Flask-Demo
 
-# demo2_a = 1000
-
-# b = b + 10
-
-def demo2():
-    demo2_a = demo2_a + 10
-    print(locals())
-    print(demo2_a)
+from abc import ABCMeta
 
 
+class test1(object):
+    __metaclass__ = ABCMeta
 
-if __name__ == '__main__':
-    demo2()
+    def test1(self):
+        print('test1')
+
+
+class UpperAttrMetaclass(type):
+
+    def __new__(cls, name, bases, dct={}):
+        a = super(UpperAttrMetaclass, cls).__new__(cls, name, l, dct)
+        return a
+
+
+b = UpperAttrMetaclass('hehe', (test1,), {})(3)

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import math
+import json
+from flask import jsonify, Response
+from proStruct.utils.date_tools import json_iso_dttm_ser
 
 try:
     from urlparse import urlparse, urljoin
@@ -69,3 +72,47 @@ def iPagination(params):
     ret['page_size'] = page_size
     ret['range'] = range(ret['from'], ret['to'] + 1)
     return ret
+
+
+class RestfulResponse(object):
+    ok = 200
+    unAuthError = 401
+    paramsError = 400
+    servererror = 500
+
+    code = ok
+    message = ""
+    data = []
+
+    @classmethod
+    def success(cls, message: str, code: int, data=None):
+        return jsonify({"code": code or cls.code, "msg": message or cls.message, "data": data or cls.data})
+
+    @classmethod
+    def success_including_date(cls, message: str, code: int, data=None):
+        # return jsonify({"code": code or cls.code, "msg": message or cls.message, "data": data or cls.data})
+        res = {
+            "code": code or cls.code,
+            "msg": message or cls.message,
+            "data": data or cls.data,
+        }
+
+        return Response(
+            json.dumps(res, default=json_iso_dttm_ser, ignore_nan=True, ensure_ascii=False),
+            status=code or cls.code, mimetype="application/json"
+        )
+
+    @classmethod
+    def fail_result(cls, message: str, code: int, data=None):
+        res = {
+            "code": code or cls.code,
+            "msg": message or cls.message,
+            "data": data or cls.data,
+        }
+        return Response(
+            # 设置ensure_ascii 为False, 支持中文的显示
+            json.dumps(res, default=json_iso_dttm_ser, ensure_ascii=False),
+            # json.dumps(obj, default=utils.json_int_dttm_ser, ignore_nan=True),
+            status=code or cls.code,
+            mimetype='application/json'
+        )

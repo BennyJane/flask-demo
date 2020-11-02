@@ -135,3 +135,5 @@ upload/demo-1/uploads/*
 
 *.iml
 *.xml
+
+autoGit.sh
