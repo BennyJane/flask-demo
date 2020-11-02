@@ -17,6 +17,7 @@ def getInstallPackages():
         res.append(package)
     return res
 
+
 #
 # current_installed_packages = getInstallPackages()
 # print(current_installed_packages)
@@ -29,6 +30,12 @@ setup(
     url='http://base.com',
     include_package_data=True,
     packages=find_packages(),
-    install_requires=['click==7.1.2', 'Flask==1.1.2', 'gunicorn==20.0.4', 'itsdangerous==1.1.0', 'Jinja2==2.11.2',
-                      'MarkupSafe==1.1.1', 'python-dotenv==0.14.0', 'Werkzeug==1.0.1']
+    install_requires=['click==7.1.2',
+                      'Flask==1.1.2',
+                      'gunicorn==20.0.4',
+                      'itsdangerous==1.1.0',
+                      'Jinja2==2.11.2',
+                      'MarkupSafe==1.1.1',
+                      'python-dotenv==0.14.0',
+                      'Werkzeug==1.0.1']
 )
