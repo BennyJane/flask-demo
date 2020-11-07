@@ -2,27 +2,6 @@ import functools
 from flask import request
 
 
-def validator(f):
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        frontValues = {}
-        checkFields = getattr(f, "checked")
-        if request.method == 'GET':
-            inputField = request.args
-            print(inputField)
-            for key, value in checkFields.items():
-                targetField = inputField.get(key, None)
-                for func in value:
-                    func(targetField)
-                    frontValues[key] = targetField
-
-        # f.frontValues = frontValues
-        print(frontValues)
-        return f(**frontValues)
-
-    return wrapper
-
-
 def frontValidator(fields):
     frontValues = {}
     inputField = {}

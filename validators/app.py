@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from validators.validatorDemo import Regexp, DataRequired, AddDefault
-from validators.decorates import validator, frontValidator
+from validators.decorates import frontValidator
 
 app = Flask(__name__)
 app.config['FLASK_ENV'] = "development"

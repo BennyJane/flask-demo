@@ -4,8 +4,39 @@ import abc
 
 
 class ValidatorMeta(abc.ABC):
-    """"""
+    """节省内存空间"""
     __slots__ = ("regex", "msg", "default")
+
+
+class DataRequired(ValidatorMeta):
+    """允许字段为空,并返回一个默认值"""
+
+    def __init__(self, msg=None):
+        self.msg = msg
+
+    def __call__(self, field):
+        if field is None or not field.strip():
+            raise Exception(self.msg)
+        return None
+
+
+class AddDefault(ValidatorMeta):
+    """允许字段为空,并返回一个默认值"""
+
+    def __init__(self, default=None, msg=None):
+        self.default = default
+        self.msg = msg
+
+    def __call__(self, field):
+        if field is None or not field.strip():
+            return self.default
+
+
+"""
+========================================================================================================================
+正则检测类
+========================================================================================================================
+"""
 
 
 class Regexp(object):
@@ -24,24 +55,3 @@ class Regexp(object):
                     msg = self.msg
             raise Exception(msg)
         return match
-
-
-class DataRequired(object):
-    def __init__(self, msg=None):
-        self.msg = msg
-
-    def __call__(self, field):
-        if field is None or not field.strip():
-            raise Exception(self.msg)
-        return None
-
-
-class AddDefault(ValidatorMeta):
-    def __init__(self, default=None, msg=None):
-        self.default = default
-        self.msg = msg
-
-    def __call__(self, field):
-        if field is None or not field.strip():
-            return self.default
-            # raise Exception(self.msg)
