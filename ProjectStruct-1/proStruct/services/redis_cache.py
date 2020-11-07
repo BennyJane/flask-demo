@@ -29,7 +29,6 @@ class RedisCache:
         except Exception:
             print("redis 连接失效")
 
-    # @contextlib.contextmanager
     def multiOrder(self):
         pipe = self.redisCur.pipeline()
         self.redisCur.set("name", "zsy")
@@ -37,12 +36,6 @@ class RedisCache:
         self.redisCur.set("name", "benny")
         print(self.redisCur.get("name"))
         pipe.execute()
-        # try:
-        #     yield ""
-        # except Exception as e:
-        #     print(e)
-        # finally:
-        #     pipe.execute()
 
     def set(self, name, value):
         self.redisCur.set(name, value)
@@ -55,9 +48,3 @@ if __name__ == '__main__':
     redis_cli = RedisCache()
     redis_cli.test_link()
     redis_cli.multiOrder()
-    # with redis_cli.multiOrder() as pipe:
-    #     redis_cli.set("name", "zsy")
-    #     # redis_cli.set("name", "benny")
-    #     print(redis_cli.get("name"))
-    # # redis_cli.get("name")
-    # print(redis_cli.get("name"))
