@@ -45,10 +45,27 @@ def index():
     return "hello jwt!"
 
 
+# 需要验证token才能的访问的页面
 @app.route('/auth/protected')
 @jwtManager.jwt_required
 def jwt_protected():
     return "this is a protected page!"
+
+
+@app.route('/refresh', methods=['POST'])
+def refresh():
+    jwt_data = jwtManager.verify_jwt()
+    if jwt_data is None:
+        return jsonify({"msg": "token验证失败"}), 401
+    elif jwt_data['type'] != 'refresh':
+        return jsonify({"msg": "该接口只接受刷新token"}), 401
+    elif jwt_data['identity'] is None:
+        return jsonify({"msg": "token验证失败"}), 401
+    current_user = jwt_data.get("identity")
+    ret = {
+        "access_token": jwtManager.encode_token(identity=current_user, fresh=False)
+    }
+    return jsonify(ret), 200
 
 
 if __name__ == '__main__':
