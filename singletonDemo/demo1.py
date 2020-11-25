@@ -5,6 +5,13 @@ import functools
 https://wiki.python.org/moin/PythonDecoratorLibrary#Collect_Data_Difference_Caused_by_Decorated_Function
 https://www.cnblogs.com/huchong/p/8244279.html
 https://python3-cookbook.readthedocs.io/zh_CN/latest/c09/p13_using_mataclass_to_control_instance_creation.html
+
+实现思路:
+1. 利用python模块加载特性
+2. 利用标记变量,保存类第一次实例化后的对象; 从第二次起,不再调用className()类实例化操作, 而是直接返回第一次的结果
+    - 标记变量的实现: 全局变量, 类属性, 闭包内置变量, 
+    - 具体实现方式(判断逻辑的位置): 函数, 闭包, 类方法, 类的__new__  
+3. 通过元类,自定义类的实例化流程, 控制是否调用类自身的 __new__ __init__ 方法 
 """
 
 
@@ -95,7 +102,7 @@ class Singleton2:
 使用元类实现单例模式:
 - 元类被触发实例化的条件: 被继承使用；
     - 当没有类继承元类时,元类并不会被实例化
-    - 每个继承元类的类,都会触发元类被实例化一次
+    - 每个继承元类的类,都会触发元类被实例化一次, 创建对应的类对象,就是元类中的cls对象
     - 元类的实例化,会在模块内所有代码执行前,被执行（优先模块中其他代码，元类默认会被直接实例化；而且只会被实例化一次）
 - 原始类的__init__ 方法只执行了一次
 - 类的实例化,都是在直接调用元类的__call__方法，　去触发子类的__new__ __init__ 实例化流程
@@ -119,6 +126,27 @@ class SingletonMeta(type):
         return cls.__instance
 
 
+class SingletonMeta2(type):
+    def __call__(cls, *args, **kwargs):  # 子类后跟(), 进行实例化时, 都会执行该方法
+        if not hasattr(cls, "_instance"):
+            cls._instance = super().__call__(*args, **kwargs)
+            return cls._instance
+        return cls._instance
+
+
+# FIXME bug: 在类cls上不能添加 __attr 属性,因为该类属性会被认为私有属性, 存入类属性中时, 该属性对应的键会修改了 _class__attr
+# cls.__dict__ 内实际存储的是 _SingletonMeta3__instance
+class SingletonMeta3(type):
+    def __call__(cls, *args, **kwargs):  # 子类后跟(), 进行实例化时, 都会执行该方法
+        print('meta32', cls.__dict__, id(cls))
+        # FIXME  正确的写法  hasattr(cls, '_SingletonMeta3__instance')
+        if not hasattr(cls, "__instance"):
+            # cls.__dict__ 内存储的其实是 _SingletonMeta3__instance
+            cls.__instance = super().__call__(*args, **kwargs)
+            return cls.__instance
+        return cls.__instance
+
+
 class Singleton3(metaclass=SingletonMeta):
     def __init__(self):
         print("singleton3 __init__")
@@ -132,6 +160,12 @@ class Singleton3(metaclass=SingletonMeta):
 class Singleton31(metaclass=SingletonMeta):
     def __init__(self):
         print("singleton3.1 __init__")
+        self.tag = 10
+
+
+class Singleton32(metaclass=SingletonMeta2):
+    def __init__(self):
+        print("singleton3.2 __init__")
         self.tag = 10
 
 
@@ -217,11 +251,17 @@ if __name__ == '__main__':
     print(Singleton2().tag)
     assert Singleton2().tag == 20
 
-    #  测试元类实现的单例
+    #  测试元类实现方法
     assert Singleton3().tag == 10
     Singleton3().tag = 20
     print('[元类,检测结果]', Singleton3().tag)
     assert Singleton3().tag == 20
+
+    #  测试元类
+    assert Singleton32().tag == 10
+    Singleton32().tag = 20
+    print('[元类32,检测结果]', Singleton32().tag)
+    assert Singleton32().tag == 20
 
     #  测试闭包实现效果
     assert newSingleton().tag == 10
