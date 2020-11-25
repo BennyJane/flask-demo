@@ -3,6 +3,8 @@ import functools
 """
 参考文章:
 https://wiki.python.org/moin/PythonDecoratorLibrary#Collect_Data_Difference_Caused_by_Decorated_Function
+https://www.cnblogs.com/huchong/p/8244279.html
+https://python3-cookbook.readthedocs.io/zh_CN/latest/c09/p13_using_mataclass_to_control_instance_creation.html
 """
 
 
@@ -37,7 +39,192 @@ class Foo:
         self.x = 15
 
 
+"""
+==================================================================================================================
+使用类实现单例模式
+
+Singleton1:
+- 每次实例化,调用的都是同一个cls对象, 实际内存分配的id是一致的
+- 运行调用cls.__dict__ ; 不允许直接向其中添加属性 cls.__dict__['name'] = value
+- 每次实例化后,返回的确实是同一个实例对象,但是每次实例化都会重新调用__init__方法; 每次都会覆盖之前的实例属性
+- !!!失败, 没有实现只实例化一次,只调用一次当前类的__init__方法
+
+
+改进方案:
+- 第一次实例化后,直接覆盖原来的__init__方法,从第二次实例化开始,调用新的__init__方法
+Singleton2:
+- 每次实例化,依然会执行__init__方法, 但每次执行的已经不再是原来类的__init__方法
+==================================================================================================================
+"""
+
+
+class Singleton1:
+    def __new__(cls, *args, **kwargs):  # cls: 由type产生, type(cls):  <class 'type'>
+        # print("cls  proxy", cls, id(cls), type(cls), cls.__class__)
+        # print("cls", cls.__dict__)
+        if cls.__dict__.get('__instance__'):
+            return cls.__dict__.get('__instance__')
+        instance = object.__new__(cls)
+        # 错误的写法, 'mappingproxy' object does not support item assignment
+        # cls.__dict__['instance'] = instance
+        cls.__instance__ = instance
+        return instance
+
+    def __init__(self):
+        print('__init__', self)
+        self.tag = 10
+
+
+class Singleton2:
+    def __new__(cls, *args, **kwargs):  # cls: 由type产生, type(cls):  <class 'type'>
+        # print("cls  proxy", cls, id(cls), type(cls), cls.__class__)
+        instance = cls.__dict__.get('__instance__')
+        if instance is not None:
+            cls.__init__ = object.__init__  # 关键操作: 必须覆盖原始的__init__方法
+            return instance
+        cls.__instance__ = object.__new__(cls)
+        return cls.__instance__
+
+    def __init__(self):
+        print('__init__', self)
+        self.tag = 10
+
+
+"""
+==================================================================================================================
+使用元类实现单例模式:
+- 元类被触发实例化的条件: 被继承使用；
+    - 当没有类继承元类时,元类并不会被实例化
+    - 每个继承元类的类,都会触发元类被实例化一次
+    - 元类的实例化,会在模块内所有代码执行前,被执行（优先模块中其他代码，元类默认会被直接实例化；而且只会被实例化一次）
+- 原始类的__init__ 方法只执行了一次
+- 类的实例化,都是在直接调用元类的__call__方法，　去触发子类的__new__ __init__ 实例化流程
+==================================================================================================================
+"""
+
+
+class SingletonMeta(type):
+    # TODO 该方法直接在模块代码被执行前,先被执行
+    def __init__(cls, *args, **kwargs):
+        # print("SingletonMeta __init__")
+        print("SingletonMeta __init__ cls", cls, id(cls))
+        cls.__instance = None  # 添加元类实例属性
+        super().__init__(*args, **kwargs)
+
+    def __call__(cls, *args, **kwargs):  # 子类实例化都会执行该方法
+        # print("SingletonMeta __call__")
+        if cls.__instance is None:
+            cls.__instance = super().__call__(*args, **kwargs)
+            return cls.__instance
+        return cls.__instance
+
+
+class Singleton3(metaclass=SingletonMeta):
+    def __init__(self):
+        print("singleton3 __init__")
+        self.tag = 10
+
+    def __call__(self, *args, **kwargs):
+        """类自身的__calls__; 非元类的__call__"""
+        # print("singleton3 __call__")
+
+
+class Singleton31(metaclass=SingletonMeta):
+    def __init__(self):
+        print("singleton3.1 __init__")
+        self.tag = 10
+
+
+"""
+==================================================================================================================
+函数+全局变量: 直接对类的实例化操作进行计数统计, 控制是佛调用 class()
+
+- 全局变量记录类是否已经实例化
+- 每次都通过函数来获取类实例
+
+
+闭包:
+- 利用闭包内的作用域, 存储类实例化的标记
+- 利用闭包实现类装饰器
+==================================================================================================================
+"""
+
+
+class Singleton4:
+    def __init__(self, *args, **kwargs):
+        self.tag = 10
+
+
+__instance = None  # 仅仅实现制定类的单例模式
+
+
+def SingletonFunc(*args, **kwargs):
+    global __instance
+    if __instance is None:
+        __instance = Singleton4(*args, **kwargs)
+    return __instance
+
+
+__multi_instance = {}
+
+
+def MultiSingletonFunc(cls, *args, **kwargs):
+    global __multi_instance
+    if cls not in __multi_instance:
+        __multi_instance[cls] = cls(*args, **kwargs)
+    return __multi_instance[cls]
+
+
+# =====================================================================
+# 使用闭包 取代原始的类
+def SingletonWrapper():
+    _instance = None
+
+    def wrapper(*args, **kwargs):
+        nonlocal _instance
+        if _instance is None:
+            _instance = Singleton4(*args, **kwargs)
+        return _instance
+
+    return wrapper
+
+
+newSingleton = SingletonWrapper()
+
+
+# =====================================================================
+# 使用闭包 取代原始的类 ==> 只能针对单个类使用
+def SingletonDecorator(cls):
+    _instance = None
+
+    @functools.wraps(cls)
+    def wrapper(*args, **kwargs):
+        nonlocal _instance
+        if _instance is None:
+            _instance = cls(*args, **kwargs)
+        return _instance
+
+    return wrapper
+
+
 if __name__ == '__main__':
     assert Foo().x == 15
     Foo().x = 20
     assert Foo().x == 20
+    #  测试单例模式的类
+    assert Singleton2().tag == 10
+    Singleton2().tag = 20
+    print(Singleton2().tag)
+    assert Singleton2().tag == 20
+
+    #  测试元类实现的单例
+    assert Singleton3().tag == 10
+    Singleton3().tag = 20
+    print('[元类,检测结果]', Singleton3().tag)
+    assert Singleton3().tag == 20
+
+    #  测试闭包实现效果
+    assert newSingleton().tag == 10
+    newSingleton().tag = 20
+    print('[闭包,检测结果]', newSingleton().tag)
+    assert newSingleton().tag == 20
