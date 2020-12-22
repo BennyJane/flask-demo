@@ -1,8 +1,7 @@
-# Flask-Demo
-Flask框架涉及的知识点demo
+# Flask-Web-Demo
+基于Flask框架进行web开发的Demo。
 
-
-### 项目目录说明
+### 目录说明
 - _FASTAPI fastapi 框架学习
 - Celery-demo
     - example-1 flask+celery 实现异步操作
@@ -17,6 +16,7 @@ Flask框架涉及的知识点demo
 - mail_demo flask-mail邮件发送
     - async_demo 异步发送
     - queue_demo 消息队列发送
+- mongdb_demo mongdb数据库使用
 - ProjectStruct-1 项目结构(1): 个人总结：适用大型项目
 - ProjectStruct-2 项目结构(2): 使用开源项目生成
 - ProjectStruct-3-simple 项目结构(3)： 个人总结，适用小型项目
@@ -32,6 +32,9 @@ Flask框架涉及的知识点demo
 - upload_demo 文件上传功能
 - validators 参考 wtforms.validators 中的验证器,实现一套常用的接口字段类型检测
 - views_demo flask中视图函数类应用
+
 ### TODO 
 - 设计API专用项目
+- 根据最新项目经验完善项目框架设计
+- 补充缺失内容
 
