@@ -8,7 +8,7 @@ import datetime
 
 from flask import Flask, request, jsonify
 
-from jwtPart.jwt_manager import JWTManager
+from jwt_pkg.jwt_manager import JWTManager
 
 app = Flask(__name__)
 SECRET = "TEST"

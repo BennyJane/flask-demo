@@ -1,6 +1,6 @@
-from wtforms.validators import Email
 import re
 import abc
+from wtforms.validators import Email
 
 
 class ValidatorMeta(abc.ABC):

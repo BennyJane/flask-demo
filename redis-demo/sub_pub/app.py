@@ -34,16 +34,16 @@ def prodcons():
     return redirect('/')
 
 
+@app.route('/procons/list')
+def proconsList():
+    redisConn.listen_task(produce_queue)
+
+
 @app.route('/pubsub')
 def pubsub():
     elem = random.randrange(10)
     redisConn.publish_msg(pubsub_channel, elem)
     return redirect('/')
-
-
-@app.route('/procons/list')
-def proconsList():
-    redisConn.listen_task(produce_queue)
 
 
 @app.route('/pubsub/list')

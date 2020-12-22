@@ -19,6 +19,7 @@ def session_scope(nullpoll):
         session_class.configure(bind=engine)
         session = session_class()
     else:
+        # 提交一次
         session = db.session()
         session.commit()
 
