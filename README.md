@@ -16,6 +16,7 @@
 - mail_demo 邮件发送
     - async_demo 异步发送
     - queue_demo 消息队列发送
+- middlewares 中间件
 - mongdb_demo
 - ProjectStruct-1 项目结构(1): 个人总结：可用于大型项目
 - ProjectStruct-2 项目结构(2): 使用开源项目生成
@@ -23,6 +24,7 @@
 - python_dotenv-pkg dotenv使用方法
 - qiniu_demo 七牛云存储使用方法
 - redis_demo
+- request_hook  flask请求钩子
 - setuptools_demo
 - signal_flask_demo flask信号机制
 - signal_pkg

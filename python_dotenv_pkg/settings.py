@@ -2,7 +2,7 @@
 # @Time : 2020/9/26
 # @Author : Benny Jane
 # @Email : 暂无
-# @File : demo1.py
+# @File : redis_flask_ext.py
 # @Project : Flask-Demo
 import os
 from pathlib import Path  # 该方法只能再 3.6以上版本使用
@@ -27,7 +27,6 @@ FLASK_ENV = os.getenv("FLASK_ENV")
 SECRET_KEY = os.getenv("SECRET_KEY")
 FLASKENV_TEST = os.getenv("FLASKENV_TEST")
 print(FLASKENV_TEST)
-
 
 
 class LoadEnvFile:
@@ -79,6 +78,7 @@ def example3():
     ENV_TEST = os.getenv("ENV_TEST")
     FLASKENV_TEST = os.getenv("FLASKENV_TEST")
     print(locals())
+
 
 # example3()
 if __name__ == '__main__':
