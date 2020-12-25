@@ -2,58 +2,47 @@
 # @Time : 2020/9/26
 # @Author : Benny Jane
 # @Email : 暂无
-# @File : command.py
+# @File : cli.py
 # @Project : Flask-Demo
 import logging
 import os
-from logging.handlers import RotatingFileHandler, SMTPHandler
-
-from flask import request
+from _compat import modifyPath
+from config import get_config_from_env
+from logging.handlers import RotatingFileHandler
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-def register_logging(app):
-    class RequestFormatter(logging.Formatter):
-        # 通过继承，修改打印信息： 报错的url 与 远程地址
-        def format(self, record):
-            record.url = request.url
-            record.remote_addr = request.remote_addr
-            return super(RequestFormatter, self).format(record)
+def register_logging(config_name=None):
+    current_env = os.getenv('FLASK_ENV', 'development')
+    config = get_config_from_env()
+    log_file_path = config.LOG_FILE_PATH
+    log_level = config.LOG_LEVEL
+    log_file_size = config.LOG_FILE_SIZE
+    log_file_count = config.LOG_FILE_COUNT
 
-    request_formatter = RequestFormatter(
-        '[%(asctime)s] %(remote_addr)s requested %(url)s\n'
-        '%(levelname)s in %(module)s: %(message)s'
+    logger = logging.getLogger(config.PROJECT_NAME)
+
+    logger.setLevel(log_level)
+
+    formatter = logging.Formatter(
+        "%(asctime)s [%(module)s.%(filename)s %(lineno)s] [%(levelname)s] : %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
     )
 
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    log_path = os.path.split(log_file_path)[0]
+    if not os.path.exists(modifyPath(log_path)):
+        os.makedirs(log_path)
+    if log_file_path and current_env == 'produce':
+        handler = RotatingFileHandler(log_file_path, maxBytes=log_file_size, backupCount=log_file_count)
+    elif log_level is None:
+        logger.handlers = [logging.NullHandler()]
+        return logger
+    if current_env == 'development':
+        handler = logging.StreamHandler()
 
-    file_handler = RotatingFileHandler(os.path.join(basedir, 'logs/bluelog.log'),
-                                       maxBytes=10 * 1024 * 1024, backupCount=10)
-    file_handler.setFormatter(formatter)
-    file_handler.setLevel(logging.INFO)
+    handler.setLevel(log_level)
+    handler.setFormatter(formatter)
+    logger.handlers = [handler]
+    return logger
 
-    if not app.debug:
-        app.logger.addHandler(file_handler)
 
-    '''
-    ====================================================================================================
-    添加邮件通知任务
-    ====================================================================================================
-    '''
-
-    mailhost = app.config.get('MAIL_SERVER', '')
-    fromaddr = app.config.get('MAIL_USERNAME', '')
-    toaddrs = app.config.get('ADMIN_EMAIL', '')
-
-    if all([mailhost, fromaddr, toaddrs]):
-        mail_handler = SMTPHandler(
-            mailhost=mailhost,
-            fromaddr=fromaddr,
-            toaddrs=toaddrs,
-            subject='Bluelog Application Error',
-            credentials=(app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD']))
-        mail_handler.setLevel(logging.ERROR)
-        mail_handler.setFormatter(request_formatter)
-        if not app.debug:
-            app.logger.addHandler(mail_handler)

@@ -98,7 +98,7 @@ mset(*args, **kwargs)
 =======================================================
 '''
 
-r = redis.Redis(host="192.168.1.124", port=6379, password='j3&r8t5gd5^7$9lM6Gf9A')
+r = redis.Redis(host="127.0.0.1", port=6379, password='life123456')
 r.setex('benny', 5, 'blog')
 print(r.get('benny'))
 

@@ -1,8 +1,13 @@
-from flask import Blueprint, render_template
+from flask import Blueprint
+from flask import jsonify
+
+from web.utils.response import ReqJson
 
 api_bp = Blueprint('api', __name__)
 
 
 @api_bp.route('/')
 def index():
-    return "<h1> 数据上传接口 </h1>"
+    res = ReqJson(code=0)
+    res.msg = "API接口"
+    return res.result

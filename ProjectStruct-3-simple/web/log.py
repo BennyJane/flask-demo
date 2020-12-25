@@ -29,7 +29,10 @@ def register_logging(app):
 
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    file_handler = RotatingFileHandler(os.path.join(basedir, f'logs/{project_name}.log'),
+    log_path = os.path.join(basedir, f'logs/{project_name}')
+    if not os.path.exists(log_path):
+        os.mkdir(log_path)
+    file_handler = RotatingFileHandler(os.path.join(log_path, f'logs/{project_name}.log'),
                                        maxBytes=10 * 1024 * 1024, backupCount=10)
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.INFO)
