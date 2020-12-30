@@ -1,13 +1,13 @@
 # Flask-Web-Demo
 基于Flask框架进行web开发的Demo。
 
-### 目录说明
-- _FASTAPI fastapi 框架
-- Celery-demo
+### 目录说明(有些案例直接写在__init__.py构造文件内)
+- _celery
     - example-1 flask+celery 异步案例
     - standard-demo flask+celery 标准项目结构
+- _FASTAPI fastapi 框架
 - click_pkg
-- config_demo 配置文件
+- flask_config 配置文件
     - demo-1 结合框架
 - flaskRestful
 - jwt_pkg   flask+jwt验证
