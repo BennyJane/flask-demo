@@ -1,0 +1,1 @@
+0 7 * * * { . ~/.bash_jobs && cd /web/www/notify && python app.py runjob -m test/test_task -a notify ;} >> /web/www/logs/test.`date +\%Y_\%m_\%d`.log 2>&1

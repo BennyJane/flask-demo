@@ -12,9 +12,6 @@ class JobTask(object):
         action = params['action'] if "action" in params else ""
         if any([action == 'output', action == ""]):
             print("[test.test_task]: 正在运行...")
-            while True:
-                time.sleep(3)
-                print("[test.test_task]: 正在运行...")
         elif action == "notify":
             params = {"msg": "平凡而渺小的一天"}
             wx_notify.new_message(params)
