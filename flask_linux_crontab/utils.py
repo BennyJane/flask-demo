@@ -15,6 +15,7 @@ NOTIFY_NEW_MESSAGE_TEMPLATE = "<font color='comment'>[每日提醒]</font>： \n
 
 class WXNotify:
     webhook = os.getenv("WEBHOOK")
+    print("企业微信机器人连接:", webhook)
     if not webhook:
         raise Exception("请在环境变量中配置微信机器人的URL：WEBHOOK=URL ")
     headers = {
