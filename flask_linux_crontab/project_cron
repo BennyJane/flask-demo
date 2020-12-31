@@ -1,3 +1,11 @@
 1 * * * * { . ~/.bash_jobs && cd /tasks/www/notify && python app.py runjob -m test/test_task -a output ;} >> /tasks/www/logs/test.`date +\%Y_\%m_\%d`.log 2>&1
 0 7 * * * { . ~/.bash_jobs && cd /tasks/www/notify && python app.py runjob -m test/test_task -a notify ;} >> /tasks/www/logs/test.`date +\%Y_\%m_\%d`.log 2>&1
 2 * * * * { . ~/.bash_jobs && cd /tasks/www/notify && python app.py runjob -n test/test_task -a notify ;} >> /tasks/www/logs/test.`date +\%Y_\%m_\%d`.log 2>&1
+
+
+
+
+
+1 * * * * { . ~/.bash_jobs && cd /home/ubuntu/www/flask-demo/flask_linux_crontab && python app.py runjob -m test/test_task -a output ;} >> /home/ubuntu/cron/logs/test.`date +\%Y_\%m_\%d`.log 2>&1
+0 7 * * * { . ~/.bash_jobs && cd /home/ubuntu/www/flask-demo/flask_linux_crontab && python app.py runjob -m test/test_task -a notify ;} >> /home/ubuntu/cron/logs/test.`date +\%Y_\%m_\%d`.log 2>&1
+2 * * * * { . ~/.bash_jobs && cd /home/ubuntu/www/flask-demo/flask_linux_crontab && python app.py runjob -n test/test_task -a notify ;} >> /home/ubuntu/cron/logs/test.`date +\%Y_\%m_\%d`.log 2>&1

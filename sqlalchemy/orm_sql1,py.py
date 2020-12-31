@@ -1,27 +1,18 @@
-# -*- coding: utf-8 -*-
-# @Time : 2020/11/24
-# @Author : Benny Jane
-# @Email : 暂无
-# @File : base_sql1,py.py
-# @Project : Flask-Demo
-# -*- coding: utf-8 -*-
-# @Time : 2020/10/16
-# @Author : Benny Jane
-# @Email : 暂无
-# @File : base_1ToN.py
-# @Project : sqlalchemy
+# !/usr/bin/env python
+# -*-coding:utf-8 -*-
+# PROJECT    : Flask-Demo
+# Time       ：2020/12/31 14:28
+# Warning    ：The Hard Way Is Easier
 import os
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
-# 必须是 __name__
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(base_dir, 'base.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET'] = 'BENNY'
-# app.config['ENV'] = 'development'
+app.config['ENV'] = 'development'
 db = SQLAlchemy(app)
 
 Column = db.Column
@@ -123,8 +114,6 @@ db.session.query(Student).filter(or_(Student.name == 'benny', Student.id == 1)).
 db.session.query(Student).filter_by(id=1).update({'name': 'benny'})  # update
 
 db.session.add_all([])  # 批量添加
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
