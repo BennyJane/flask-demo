@@ -28,7 +28,7 @@ class DevelopmentConfig(BaseConfig):
     # 添加celery配置
     broker_url = 'redis://localhost:6379'
     result_backend = 'redis://localhost:6379'
-    imports = ('proStruct.services.tasks')
+    imports = ('proStruct.services.flask_linux_crontab')
 
     # 配置redis
     REDIS_HOST = '127.0.0.1'
@@ -51,7 +51,7 @@ class DevelopmentConfig(BaseConfig):
     JOB_STORES = {
         "redis": RedisJobStore(host=REDIS_HOST, port=REDIS_PORT),  # 设置一个名为redis的job存储，后端使用 redis
         # 一个名为 default 的 job 存储，后端使用数据库（使用 Sqlite）
-        # "default": SQLAlchemyJobStore(url="sqlite:///jobs.sqlite")
+        # "default": SQLAlchemyJobStore(url="sqlite:///flask_linux_crontab.sqlite")
         "backend_db": SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
     }
     JOB_EXECUTORS = {

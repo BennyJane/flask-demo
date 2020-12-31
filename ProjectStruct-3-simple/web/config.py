@@ -37,7 +37,7 @@ class DevelopmentConfig(BaseConfig):
     # 添加celery配置
     broker_url = 'redis://localhost:6379'
     result_backend = 'redis://localhost:6379'
-    imports = ('proStruct.services.tasks')
+    imports = ('proStruct.services.flask_linux_crontab')
 
 
 class TestingConfig(BaseConfig):

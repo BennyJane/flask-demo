@@ -9,7 +9,7 @@ echo `pwd`
 
 # 启动celery
 
-#celery -A tasks:celery worker -l error
+#celery -A flask_linux_crontab:celery worker -l error
 celery -A tasks:celery worker
 # 后台运行
 #celery multi start w1 -A task:celery -l info --logfile = celerylog.log --pidfile = celerypid.pid

@@ -4,7 +4,7 @@ from celery import Celery
 class CeleryConfig:
     broker = 'redis://localhost:6379'
     backend = 'redis://localhost:6379'
-    imports = ('proj.tasks',)
+    imports = ('proj.flask_linux_crontab',)
 
 
 # todo 第一个参数以及 imports 必须是异步任务所在模块的名称
