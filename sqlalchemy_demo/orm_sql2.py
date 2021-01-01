@@ -91,36 +91,7 @@ def current_info(res, asc, is_end=False):
     print(info)
 
 
-def add_without_lock(num: int):
-    res = db.session.query(Teacher).filter(Teacher.id == 1).first()
-    current_info(res, num)
-
-    if not res.age:
-        res.age = num
-    else:
-        res.age += num
-    time.sleep(num)  # 使用增加值模拟阻塞时长，明确了sql提交的先后顺序
-    db.session.commit()
-
-    current_info(res, num, is_end=True)
-
-
-# print(db.session)
-def multi_process_bug(pool_num, ):
-    res = db.session.query(Teacher).filter(Teacher.id == 1).first()
-    print("[多进程修改前]：", res.age)
-    db.session.commit()
-
-    pool = Pool(pool_num)
-    pool.map(add_without_lock, [1, 2, 3])
-    res = db.session.query(Teacher).filter(Teacher.id == 1).first()
-
-    # 理论上应该增加6
-    print("[多进程修改同一个数据]：", res.age)
-
-
 def add_age(num, use_lock=True):
-    """添加锁机制"""
     if use_lock:
         res = db.session.query(Teacher).filter(Teacher.id == 1).with_for_update().first()
     else:
@@ -146,7 +117,7 @@ def multi_process_correct(process_num: int, use_lock: bool = True):
     db.session.commit()  # 必须在这里提交；终止上面的查询；否则下面的筛选还使用的旧数据；如果commit放在异步任务后，会使用当前查询数据覆盖数据库数据
     pool = Pool(process_num)
     add_age_func = partial(add_age, use_lock=use_lock)
-    pool.map(add_age_func, [1, 2, 3])
+    pool.map(add_age_func, [i for i in range(1, process_num + 1)])
     pool.close()
     pool.join()
     # time.sleep(2)
@@ -157,6 +128,10 @@ def multi_process_correct(process_num: int, use_lock: bool = True):
 
 if __name__ == '__main__':
     # insert_data()
-    pool_num = 5
+    # 测试没有使用with_for_update
+    pool_num = 4
+    multi_process_correct(pool_num, use_lock=False)
+
+    # 测试使用with_for_update
+    pool_num = 4
     multi_process_correct(pool_num, use_lock=True)
-    pass
