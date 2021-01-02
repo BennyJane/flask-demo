@@ -3,16 +3,34 @@
 # PROJECT    : Flask-Demo
 # Time       ：2021/1/2 22:15
 # Warning    ：The Hard Way Is Easier
-import os
-import time
-import random
-from functools import partial
-from multiprocessing import Pool
 from sqlalchemy_demo.orm_models import db
 from flask_sql.sql_func import SqlFunc
 
+
 sqlFunc = SqlFunc(db.session)
 
-res = sqlFunc.select_sql("student", ["id", 'name'], condition="where id = 8")
+sqlFunc.update_sql("student", ["name"], ["student-10"], condition="where id = 9")
+
+res = sqlFunc.select_sql("student", ["id", 'name'], condition="where id = 9")
 print(res)
+
+sqlFunc.update_sql("student", ["name"], ["student-9"], condition="where id = 9")
+# print(sqlFunc.select_sql("student", ["id", 'name'], condition="where id = 9"))
+sqlFunc.commit
+
+# 删除
+sqlFunc.delete_sql("student", condition="where id = 10")
+sqlFunc.commit
+
+# 新增数据，需要提交操作 commit
+sqlFunc.insert_sql("student", ['id', 'name'], [10, 'student-10'])
+sqlFunc.commit
+
+# 删除
+sqlFunc.delete_sql("student", condition="where id = 10")
+sqlFunc.commit
+
+res = sqlFunc.execute_sql("select * from student")
+print(res)
+
 

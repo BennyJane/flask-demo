@@ -92,7 +92,8 @@ def with_metaclass(meta, *bases):
     middle_class = type.__new__(metaclass, "temporary_class", (), {})
     print('middle_class', middle_class, middle_class.mro(), type(middle_class))
     # 非绑定调用metaclass的__new__方法，查看middle_class的元类，可知其继承自metaclass
-    return type.__new__(metaclass, "temporary_class", (), {})
+    # 只有当前模块内定义元类的子类时，在模块加载时，才会调用元类生成子类
+    return type.__new__(metaclass, "temporary_class", (), {})   # 仅仅定义元类temporary_class，并不会调用__new__方法
     # return metaclass("temporary_class", (), {})
     # return middle_class
 

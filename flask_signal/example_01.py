@@ -5,7 +5,8 @@
 # @File : example.py
 # @Project : Flask-Demo
 
-from flask import Flask, signals, request
+from flask import Flask
+from flask import request
 from flask.signals import Namespace
 
 app = Flask(__name__)
@@ -14,7 +15,7 @@ app = Flask(__name__)
 自定义信号：
 - 将信号定义在Flask默认的命名空间内
 from flask.signals import _signals
-custom_signal = _signals..signal('custom-signal')
+custom_signal = _signals.signal('custom-signal')
 
 - 将信号定义在自定的命名空间内
 from flask.signals import Namespace

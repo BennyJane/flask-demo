@@ -23,10 +23,11 @@ def sig(*args, **kwargs):
 
 
 # 给你要连接的函数绑定信号的类型（这里就举一个例子）
+# 在请求开始时，发送信号
 signals.request_started.connect(sig)
 
 
-@app.route('/<num:int>')
+@app.route('/<int:int>')
 @app.route('/')
 def index(num):
     print('starting request')
