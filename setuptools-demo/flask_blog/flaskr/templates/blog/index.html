@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}贴子{% endblock %}</h1>
+    {% if g.user %}
+        <a class="action" href="{{ url_for('blog.create') }}">发帖</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <form action="{{ url_for('blog.search') }}" method="post" class="serach-bar">
+        <input class="serach-box" name="search" id="search" value="{{ request.form['search'] }}"
+               placeholder="Please enter the title">
+        <input class="search-buttom" type="submit" value="search" style="align-self: flex-end">
+    </form>
+    {% for post in posts %}
+        <article class="post">
+            <header>
+                <div>
+                    <h1>{{ post['title'] }}</h1>
+                    <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
+                </div>
+                {% if g.user['id'] == post['author_id'] %}
+                    <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">编辑</a>
+                {% endif %}
+            </header>
+            <p class="body">{{ post['body'] }}</p>
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
