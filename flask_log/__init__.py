@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Time : 2020/9/23
-# @Author : Benny Jane
-# @Email : 暂无
-# @File : __init__.py.py
-# @Project : Flask-Demo
+# !/usr/bin/env python
+# -*-coding:utf-8 -*-
+# Warning    ：The Hard Way Is Easier

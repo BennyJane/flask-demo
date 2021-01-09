@@ -1,11 +1,8 @@
 # !/usr/bin/env python
 # -*-coding:utf-8 -*-
-# PROJECT    : Flask-Demo
-# Time       ：2020/12/10 15:22
 # Warning    ：The Hard Way Is Easier
 import logging
 from flask import Flask
-from flask import request
 from logging import FileHandler
 from logging.handlers import TimedRotatingFileHandler
 from logging.handlers import RotatingFileHandler
