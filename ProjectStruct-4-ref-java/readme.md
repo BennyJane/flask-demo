@@ -1,32 +1,36 @@
-## 大项目分析
+## 大型项目文件目录
 
 
-## 项目目录说明
-[_compat](_compat)  
-[config 配置文件](config)  
-[logs 日志目录](logs)  
-[test 测试模块](test)  
-[webApp 项目模块](webApp)  
-&nbsp;&nbsp;    [apis API模块](webApp/apis)  
-&nbsp;&nbsp;    [connectors 数据库连接](webApp/connectors)
-&nbsp;&nbsp;    [errors 全局异常](webApp/errors)  
-&nbsp;&nbsp;    [fakes 测试数据](webApp/fakes)  
-&nbsp;&nbsp;    [hooks 钩子函数(中间件)](webApp/hooks)  
-&nbsp;&nbsp;    [models 数据模块](webApp/models)  
-&nbsp;&nbsp;    [resources 资源目录](webApp/resources)  
-&nbsp;&nbsp;    [services 服务核心逻辑](webApp/services)  
-&nbsp;&nbsp;    [static 静态文件](webApp/static)  
-&nbsp;&nbsp;    [templates 模板文件](webApp/templates)  
-&nbsp;&nbsp;    [utils 全局工具](webApp/utils)  
-&nbsp;&nbsp;    [views 视图模块](webApp/views)  
-&nbsp;&nbsp;    [__init__.py create_app](webApp/__init__.py)  
-&nbsp;&nbsp;    [cli.py CMD配置](webApp/cli.py)  
-&nbsp;&nbsp;    [extensions.py 扩展配置](webApp/extensions.py)  
-&nbsp;&nbsp;    [log.py 日志配置](webApp/log.py)  
-[.env](.env)  
-[.flaskenv](.flaskenv)  
-[docker-compose.yaml](docker-compose.yaml)  
-[Dockerfile](Dockerfile)  
-[readme]()  
-[setup.py](setup.py)  
-[wsgi.py](wsgi.py)
+## 目录说明
+```text
+[_compat]
+[config 配置文件]
+[logs 日志目录]
+[test 测试模块]
+[webApp 项目模块] 
+    [apis API模块] 
+    [errors 全局异常]
+    [fakes 测试数据]
+    [hooks 钩子函数(中间件)]
+    [models 数据模块]
+    [resources 资源目录]
+    [services 服务核心逻辑]
+    [static 静态文件]
+    [templates 模板文件] 
+    [utils 全局工具] 
+    [views 视图模块]
+    [__init__.py create_app]
+    [cli.py CMD配置]
+    [extensions.py 扩展配置]
+    [log.py 日志配置]
+.env  
+.flaskenv  
+docker-compose.yaml  
+Dockerfile  
+readme  
+setup.py  
+wsgi.py  
+```
+
+
+
