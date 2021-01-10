@@ -6,6 +6,11 @@
 from sqlalchemy_demo.orm_models import db
 from flask_sql.sql_func import SqlFunc
 
+"""
+========================================
+测试SQL拼凑函数
+========================================
+"""
 
 sqlFunc = SqlFunc(db.session)
 
@@ -32,5 +37,3 @@ sqlFunc.commit
 
 res = sqlFunc.execute_sql("select * from student")
 print(res)
-
-
